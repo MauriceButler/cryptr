@@ -1,0 +1,30 @@
+{
+  "name": "cryptr",
+  "description": "A very basic encrypt and decrypt node module.",
+  "version": "0.0.1",
+  "main": "cryptr",  
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MauriceButler/Cryptr.git"
+  },
+  "bugs": "https://github.com/MauriceButler/Cryptr/issues",
+  "dependencies": {
+    "crypto" : ""
+  },
+  "keywords": [
+    "cryptr",
+    "crypter",
+    "encrypt",
+    "decrypt",
+    "encryption",
+    "decryption"
+  ],
+  "author": "Maurice Butler <maurice.butler@gmail.com>",
+  "contributors": [
+    {
+      "name": "Maurice Butler",
+      "email": "maurice.butler@gmail.com"
+    }
+  ],
+  "license": "MIT"
+}
