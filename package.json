@@ -1,15 +1,17 @@
 {
   "name": "cryptr",
-  "description": "A very basic encrypt and decrypt node module.",
-  "version": "0.0.1",
-  "main": "cryptr",
+  "version": "1.0.0",
+  "description": "a simple encrypt and decrypt module for node.js",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node ./tests"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MauriceButler/Cryptr.git"
-  },
-  "bugs": "https://github.com/MauriceButler/Cryptr/issues",
-  "dependencies": {
-    "crypto": ""
+    "url": "git://github.com/MauriceButler/cryptr.git"
   },
   "keywords": [
     "cryptr",
@@ -17,14 +19,16 @@
     "encrypt",
     "decrypt",
     "encryption",
-    "decryption"
+    "decryption",
+    "crypto",
+    "cipher",
+    "aes256",
+    "hashr"
   ],
   "author": "Maurice Butler <maurice.butler@gmail.com>",
-  "contributors": [
-    "Maurice Butler <maurice.butler@gmail.com>"
-  ],
   "license": "MIT",
-  "scripts": {
-    "test": "node tests.js"
-  }
+  "bugs": {
+    "url": "https://github.com/MauriceButler/cryptr/issues"
+  },
+  "homepage": "https://github.com/MauriceButler/cryptr"
 }
