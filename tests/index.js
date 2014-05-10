@@ -67,34 +67,41 @@ test('defaults algorithm and secret', function(t){
         }
     });
 
-    var Cryptr = getCleanTestObject,
+    var Cryptr = getCleanTestObject(),
         cryptr = new Cryptr(),
         testValue = 'bacon',
         encrypted = cryptr.encrypt(testValue),
         decrypted = cryptr.decrypt(encrypted);
 });
 
+test('uses provided algorithm and secret', function(t){
+    t.plan(4);
 
+    var testAlgorithm = 'foo',
+        testSecret = 'bar';
 
+    mockery.registerMock('crypto', {
+        createCipher: function(algorithm, secret){
+            t.equal(algorithm, testAlgorithm, 'correct algorithm');
+            t.equal(secret, testSecret, 'correct secret');
+            return {
+                update: function(){},
+                final: function(){}
+            };
+        },
+        createDecipher: function(algorithm, secret){
+            t.equal(algorithm, testAlgorithm, 'correct algorithm');
+            t.equal(secret, testSecret, 'correct secret');
+            return {
+                update: function(){},
+                final: function(){}
+            };
+        }
+    });
 
-// function test(testName, cryptr, testValue){
-//     testValue = testValue || 'bacon';
-
-//     var encrypted = cryptr.encrypt(testValue),
-//         decrypted = cryptr.decrypt(encrypted);
-
-//     console.log(testValue + '');
-
-//         if(decrypted === testValue + ''){
-//             console.log(testName + ' completed successfully.');
-//         } else {
-//             console.error(testName + ' failed.');
-//         }
-// }
-
-// test('Defaults', new Cryptr());
-// test('With Secret', new Cryptr('myTotalySecretKey'));
-// test('With aes128', new Cryptr('myTotalySecretKey', 'aes128'));
-// test('With number', new Cryptr(), 123456);
-// test('With bool', new Cryptr(), true);
-// test('With object', new Cryptr(), { foo: 'bar'});
+    var Cryptr = getCleanTestObject(),
+        cryptr = new Cryptr(testSecret, testAlgorithm),
+        testValue = 'bacon',
+        encrypted = cryptr.encrypt(testValue),
+        decrypted = cryptr.decrypt(encrypted);
+});
