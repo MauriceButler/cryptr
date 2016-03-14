@@ -8,11 +8,7 @@ The Cryptr constructor takes 2 option arguments.
 
 	Cryptr([secret, algorithm])
 
-If a secret is not provided the default secret is used but a warning message is logged to the console.
-
-	Cryptr: Warning - Using default secret...
-
-If an algorithm is not provided it defaults to *aes256*.
+If an algorithm is not provided it defaults to *AES-256-CTR*.
 
 **DO NOT USE THIS MODULE FOR ENCRYPTING PASSWORDS!**
 
