@@ -1,107 +1,110 @@
-var test = require('grape'),
-    mockery = require('mockery'),
-    pathToObjectUnderTest = '../';
+var test = require('tape'),
+    Cryptr = require('../'),
+    testSecret = 'myTotalySecretKey',
+    testData = 'bacon';
 
-mockery.registerAllowables([pathToObjectUnderTest]);
-
-function resetMocks(){
-    mockery.registerMock('crypto', {
-        createCipher: function(){
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        },
-        createDecipher: function(){
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        }
-    });
-}
-
-function getCleanTestObject(){
-    delete require.cache[require.resolve(pathToObjectUnderTest)];
-    mockery.enable({ useCleanCache: true, warnOnReplace: false });
-    var objectUnderTest = require(pathToObjectUnderTest);
-    mockery.disable();
-    resetMocks();
-    return objectUnderTest;
-}
-
-resetMocks();
-
-test('simple default case', function(t){
+test('defaults to aes-256-ctr', function(t){
     t.plan(2);
 
-    var Cryptr = require('../'),
-        cryptr = new Cryptr('foo'),
-        testValue = 'bacon',
-        encrypted = cryptr.encrypt(testValue),
-        decrypted = cryptr.decrypt(encrypted);
+    var cryptr = new Cryptr(testSecret),
+        encryptedString = cryptr.encrypt(testData),
+        decryptedString = cryptr.decrypt(encryptedString);
 
-    t.equal(encrypted, '2fa603799f', 'correctly encrypted using AES-256-CTR');
-    t.equal(decrypted, testValue, 'got correct decrypted value back');
+    t.equal(encryptedString, 'd7233809c0', 'encrypted with aes-256-ctr');
+    t.equal(decryptedString, testData, 'decrypted aes-256-ctr correctly');
 });
 
-test('defaults algorithm and secret', function(t){
-    t.plan(4);
+test('uses provided algorithm', function(t){
+    t.plan(2);
 
-    mockery.registerMock('crypto', {
-        createCipher: function(algorithm, secret){
-            t.equal(algorithm, 'AES-256-CTR', 'correctly defaults algorithm');
-            t.equal(secret, 'foo', 'correctly passes secret');
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        },
-        createDecipher: function(algorithm, secret){
-            t.equal(algorithm, 'AES-256-CTR', 'correctly defaults algorithm');
-            t.equal(secret, 'foo', 'correctly passes secret');
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        }
-    });
+    var cryptr = new Cryptr(testSecret, 'aes256'),
+        encryptedString = cryptr.encrypt(testData),
+        decryptedString = cryptr.decrypt(encryptedString);
 
-    var Cryptr = getCleanTestObject(),
-        cryptr = new Cryptr('foo'),
-        testValue = 'bacon',
-        encrypted = cryptr.encrypt(testValue),
-        decrypted = cryptr.decrypt(encrypted);
+    t.equal(encryptedString, 'e74d7c0de21e72aaffc8f2eef2bdb7c1', 'encrypted with aes256');
+    t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
-test('uses provided algorithm and secret', function(t){
-    t.plan(4);
+test('goes bang if bad secret', function(t){
+    var badSecrets = [
+            null,
+            undefined,
+            0,
+            123451345134,
+            '',
+            new Buffer('buffer'),
+            {}
+        ];
 
-    var testAlgorithm = 'foo',
-        testSecret = 'bar';
+    t.plan(badSecrets.length);
 
-    mockery.registerMock('crypto', {
-        createCipher: function(algorithm, secret){
-            t.equal(algorithm, testAlgorithm, 'correct algorithm');
-            t.equal(secret, testSecret, 'correct secret');
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        },
-        createDecipher: function(algorithm, secret){
-            t.equal(algorithm, testAlgorithm, 'correct algorithm');
-            t.equal(secret, testSecret, 'correct secret');
-            return {
-                update: function(){},
-                final: function(){}
-            };
-        }
-    });
+    for (var i = 0; i < badSecrets.length; i++) {
+        t.throws(
+            function(){
+                new Cryptr(badSecrets[i]);
+            },
+            /Cryptr: secret must be a non-0-length string/,
+            'throws on bad secret ' + badSecrets[i]
+        );
+    }
+});
 
-    var Cryptr = getCleanTestObject(),
-        cryptr = new Cryptr(testSecret, testAlgorithm),
-        testValue = 'bacon',
-        encrypted = cryptr.encrypt(testValue),
-        decrypted = cryptr.decrypt(encrypted);
+test('goes bang if bad algorithm', function(t){
+    var badAlgorithms = [
+            123451345134,
+            {},
+            new Buffer('buffer')
+        ];
+
+    t.plan(badAlgorithms.length);
+
+    for (var i = 0; i < badAlgorithms.length; i++) {
+        t.throws(
+            function(){
+                new Cryptr(testSecret, badAlgorithms[i]);
+            },
+            /Cryptr: algorithm must be a string, see https:\/\/nodejs.org\/api\/crypto\.html for details/,
+            'throws on bad algorithm ' + badAlgorithms[i]
+        );
+    }
+});
+
+test('encrypt goes bang if value is null or undefined', function(t){
+    var cryptr = new Cryptr(testSecret),
+        badValues = [
+            null,
+            undefined
+        ];
+
+    t.plan(badValues.length);
+
+    for (var i = 0; i < badValues.length; i++) {
+        t.throws(
+            function(){
+                cryptr.encrypt(badValues[i]);
+            },
+            /value must not be null or undefined/,
+            'throws on value ' + badValues[i]
+        );
+    }
+});
+
+test('decrypt goes bang if value is null or undefined', function(t){
+    var cryptr = new Cryptr(testSecret),
+        badValues = [
+            null,
+            undefined
+        ];
+
+    t.plan(badValues.length);
+
+    for (var i = 0; i < badValues.length; i++) {
+        t.throws(
+            function(){
+                cryptr.decrypt(badValues[i]);
+            },
+            /value must not be null or undefined/,
+            'throws on value ' + badValues[i]
+        );
+    }
 });

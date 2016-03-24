@@ -22,6 +22,7 @@
     "decryption",
     "crypto",
     "cipher",
+    "aes-256-ctr",
     "aes256",
     "hashr"
   ],
@@ -32,7 +33,6 @@
   },
   "homepage": "https://github.com/MauriceButler/cryptr",
   "devDependencies": {
-    "grape": "^0.1.10",
-    "mockery": "^1.4.0"
+    "tape": "^4.5.1"
   }
 }

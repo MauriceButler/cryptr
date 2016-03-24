@@ -6,32 +6,32 @@ function Cryptr(secret, algorithm){
 		throw new Error('Cryptr: secret must be a non-0-length string');
 	}
 
-	algorithm = algorithm || 'AES-256-CTR';
+	algorithm = algorithm || 'aes-256-ctr';
 
 	if(typeof algorithm !== 'string'){
 		throw new Error('Cryptr: algorithm must be a string, see https://nodejs.org/api/crypto.html for details');
 	}
 
-	this.encrypt = function encrypt(text){
-		if(text == null){
-			throw new Error('text must not be null or undefined');
+	this.encrypt = function encrypt(value){
+		if(value == null){
+			throw new Error('value must not be null or undefined');
 		}
 
-		text = String(text);
+		value = String(value);
 
 		var cipher = crypto.createCipher(algorithm, secret);
-		return cipher.update(text, 'utf8', 'hex') + cipher.final('hex');
+		return cipher.update(value, 'utf8', 'hex') + cipher.final('hex');
 	};
 
-	this.decrypt = function decrypt(text){
-		if(text == null){
-			throw new Error('text must not be null or undefined');
+	this.decrypt = function decrypt(value){
+		if(value == null){
+			throw new Error('value must not be null or undefined');
 		}
-		
-		text = String(text);
-		
+
+		value = String(value);
+
 		var decipher = crypto.createDecipher(algorithm, secret);
-		return decipher.update(text, 'hex', 'utf8') + decipher.final('utf8');
+		return decipher.update(value, 'hex', 'utf8') + decipher.final('utf8');
 	};
 }
 
