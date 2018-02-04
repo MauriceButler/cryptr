@@ -10,7 +10,7 @@ The Cryptr constructor takes 1 required and 1 optional argument.
 
 	Cryptr(secret[, algorithm])
 
-If an algorithm is not provided it defaults to `aes-256-ctr`.
+If an algorithm is not provided it defaults to `aes256`.
 
 
 **DO NOT USE THIS MODULE FOR ENCRYPTING PASSWORDS!**
@@ -32,7 +32,7 @@ var Cryptr = require('cryptr'),
 var encryptedString = cryptr.encrypt('bacon'),
     decryptedString = cryptr.decrypt(encryptedString);
 
-console.log(encryptedString);  // d7233809c0
+console.log(encryptedString);  // e74d7c0de21e72aaffc8f2eef2bdb7c1
 console.log(decryptedString);  // bacon
 ```
 

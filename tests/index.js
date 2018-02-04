@@ -3,15 +3,15 @@ var test = require('tape'),
     testSecret = 'myTotalySecretKey',
     testData = 'bacon';
 
-test('defaults to aes-256-ctr', function(t){
+test('defaults to aes256', function(t){
     t.plan(2);
 
     var cryptr = new Cryptr(testSecret),
         encryptedString = cryptr.encrypt(testData),
         decryptedString = cryptr.decrypt(encryptedString);
 
-    t.equal(encryptedString, 'd7233809c0', 'encrypted with aes-256-ctr');
-    t.equal(decryptedString, testData, 'decrypted aes-256-ctr correctly');
+    t.equal(encryptedString, 'e74d7c0de21e72aaffc8f2eef2bdb7c1', 'encrypted with aes256');
+    t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
 test('uses provided algorithm', function(t){

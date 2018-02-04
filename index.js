@@ -6,7 +6,7 @@ function Cryptr(secret, algorithm){
 		throw new Error('Cryptr: secret must be a non-0-length string');
 	}
 
-	algorithm = algorithm || 'aes-256-ctr';
+	algorithm = algorithm || 'aes256';
 
 	if(typeof algorithm !== 'string'){
 		throw new Error('Cryptr: algorithm must be a string, see https://nodejs.org/api/crypto.html for details');
