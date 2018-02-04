@@ -1,4 +1,4 @@
-#cryptr
+# cryptr
 
 cryptr is a simple encrypt and decrypt module for node.js
 
