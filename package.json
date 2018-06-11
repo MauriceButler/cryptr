@@ -24,6 +24,7 @@
     "cipher",
     "aes-256",
     "aes256",
+    "aes-256-ctr",
     "hashr"
   ],
   "author": "Maurice Butler <maurice.butler@gmail.com>",
@@ -33,6 +34,7 @@
   },
   "homepage": "https://github.com/MauriceButler/cryptr",
   "devDependencies": {
-    "tape": "^4.8.0"
-  }
+    "tape": "^4.9.1"
+  },
+  "dependencies": {}
 }
