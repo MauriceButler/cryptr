@@ -1,5 +1,7 @@
 # cryptr
 
+[![Build Status](https://travis-ci.org/MauriceButler/cryptr.svg?branch=master)](https://travis-ci.org/MauriceButler/cryptr)
+
 cryptr is a simple `aes-256-ctr` encrypt and decrypt module for node.js
 
 It is for doing simple encryption of values UTF-8 strings that need to be decrypted at a later time.
