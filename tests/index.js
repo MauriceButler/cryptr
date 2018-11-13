@@ -1,5 +1,6 @@
-const Cryptr = require('../');
 const test = require('tape');
+const Cryptr = require('../');
+
 const testSecret = 'myTotalySecretKey';
 const testData = 'bacon';
 
