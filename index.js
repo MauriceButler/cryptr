@@ -32,9 +32,27 @@ function Cryptr(secret) {
         const stringValue = String(value);
         const iv = Buffer.from(stringValue.slice(0, 32), 'hex');
         const encrypted = stringValue.slice(32);
+        let legacyValue = false;
+        let decipher;
 
-        const decipher = crypto.createDecipheriv(algorithm, key, iv);
-        return decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+        try {
+            decipher = crypto.createDecipheriv(algorithm, key, iv);
+        } catch (exception) {
+            if (exception.message === 'Invalid IV length') {
+                legacyValue = true;
+            } else {
+                throw exception;
+            }
+        }
+
+        if (!legacyValue) {
+            return decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+        }
+
+        const legacyIv = stringValue.slice(0, 16);
+        const legacyEncrypted = stringValue.slice(16);
+        decipher = crypto.createDecipheriv(algorithm, key, legacyIv);
+        return decipher.update(legacyEncrypted, 'hex', 'utf8') + decipher.final('utf8');
     };
 }
 

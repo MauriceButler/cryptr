@@ -11,7 +11,17 @@ test('works...', t => {
     const encryptedString = cryptr.encrypt(testData);
     const decryptedString = cryptr.decrypt(encryptedString);
 
-    t.equal(decryptedString, testData, 'decrypted aes256 correctly');
+    t.equal(decryptedString, testData, 'decrypted sha256 correctly');
+});
+
+test('works with old iv size values', t => {
+    t.plan(1);
+
+    const cryptr = new Cryptr(testSecret);
+
+    const decryptedString = cryptr.decrypt('5590fd6409be2494de0226f5d7');
+
+    t.equal(decryptedString, 'bacon', 'decrypted old iv value');
 });
 
 test('goes bang if bad secret', t => {
