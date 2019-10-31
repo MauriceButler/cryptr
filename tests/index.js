@@ -57,3 +57,27 @@ test('decrypt goes bang if value is null or undefined', t => {
         );
     }
 });
+
+test('decrypt goes bang if value has been tampered with', t => {
+    t.plan(1);
+
+    const cryptr = new Cryptr(testSecret);
+
+    const encryptedString = cryptr.encrypt(testData);
+
+    const encryptedBuffer = Buffer.from(encryptedString, 'hex');
+    const b1 = Buffer.from(testData);
+    const b2 = Buffer.from('hello');
+
+    for (let i = 0; i < b1.length; i++) {
+        encryptedBuffer[i + 16] ^= b1[i] ^ b2[i];
+    }
+
+    const modifiedValue = encryptedBuffer.toString('hex');
+
+    t.throws(
+        () => cryptr.decrypt(modifiedValue),
+        /Unsupported state or unable to authenticate data/,
+        'throws on tampered data',
+    );
+});
