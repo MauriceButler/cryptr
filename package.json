@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/MauriceButler/cryptr",
   "devDependencies": {
-    "tape": "^4.9.1"
+    "tape": "^4.11.0"
   },
   "dependencies": {}
 }
