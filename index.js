@@ -52,7 +52,7 @@ function Cryptr(secret) {
 
         decipher.setAuthTag(tag);
 
-        return decipher.update(encrypted, 'hex', 'utf8') + decipher.final('utf8');
+        return decipher.update(encrypted) + decipher.final('utf8');
     };
 }
 
