@@ -14,6 +14,17 @@ test('works...', t => {
     t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
+test('works with utf8 specific characters', t => {
+    t.plan(1);
+
+    const testString = 'ßáÇÖÑ 🥓';
+    const cryptr = new Cryptr(testSecret);
+    const encryptedString = cryptr.encrypt(testString);
+    const decryptedString = cryptr.decrypt(encryptedString);
+
+    t.equal(decryptedString, testString, 'decrypted aes256 correctly with UTF8 chars');
+});
+
 test('goes bang if bad secret', t => {
     const badSecrets = [null, undefined, 0, 123451345134, '', Buffer.from('buffer'), {}];
 
