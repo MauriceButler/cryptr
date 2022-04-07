@@ -24,11 +24,11 @@ Passwords should be a one way hash. Use [bcrypt](https://npmjs.org/package/bcryp
 
 ```javascript
 const Cryptr = require('cryptr');
-const cryptr = new Cryptr('myTotalySecretKey');
+const cryptr = new Cryptr('myTotallySecretKey');
 
 const encryptedString = cryptr.encrypt('bacon');
 const decryptedString = cryptr.decrypt(encryptedString);
 
-console.log(encryptedString); // e7b75a472b65bc4a42e7b3f78833a4d00040beba796062bf7c13d9533b149e5ec3784813dc20348fdf248d28a2982df85b83d1109623bce45f08238f6ea9bd9bb5f406427b2a40f969802635b8907a0a57944f2c12f334bd081d5143a357c173a611e1b64a
+console.log(encryptedString); // 2a3260f5ac4754b8ee3021ad413ddbc11f04138d01fe0c5889a0dd7b4a97e342a4f43bb43f3c83033626a76f7ace2479705ec7579e4c151f2e2196455be09b29bfc9055f82cdc92a1fe735825af1f75cfb9c94ad765c06a8abe9668fca5c42d45a7ec233f0
 console.log(decryptedString); // bacon
 ```
