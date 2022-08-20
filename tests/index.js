@@ -1,7 +1,7 @@
 const test = require('tape');
 const Cryptr = require('../');
 
-const testSecret = 'myTotalySecretKey';
+const testSecret = 'key1';
 const testData = 'bacon';
 
 test('works...', t => {

@@ -37,5 +37,7 @@
   "devDependencies": {
     "tape": "^4.13.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "jest": "^28.1.3"
+  }
 }
