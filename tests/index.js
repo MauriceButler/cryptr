@@ -14,6 +14,16 @@ test('works...', t => {
     t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
+test('works with custom pbkdf2Iterations', t => {
+    t.plan(1);
+
+    const cryptr = new Cryptr(testSecret, 10000);
+    const encryptedString = cryptr.encrypt(testData);
+    const decryptedString = cryptr.decrypt(encryptedString);
+
+    t.equal(decryptedString, testData, 'decrypted aes256 correctly');
+});
+
 test('works with utf8 specific characters', t => {
     t.plan(1);
 

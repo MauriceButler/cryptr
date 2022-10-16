@@ -7,13 +7,17 @@ const tagLength = 16;
 const tagPosition = saltLength + ivLength;
 const encryptedPosition = tagPosition + tagLength;
 
-function Cryptr(secret) {
+function Cryptr(secret, pbkdf2Iterations) {
     if (!secret || typeof secret !== 'string') {
         throw new Error('Cryptr: secret must be a non-0-length string');
     }
 
+    if (!pbkdf2Iterations) {
+        pbkdf2Iterations = 100000
+    }
+
     function getKey(salt) {
-        return crypto.pbkdf2Sync(secret, salt, 100000, 32, 'sha512');
+        return crypto.pbkdf2Sync(secret, salt, pbkdf2Iterations, 32, 'sha512');
     }
 
     this.encrypt = function encrypt(value) {
