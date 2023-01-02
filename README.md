@@ -10,7 +10,11 @@ The Cryptr constructor takes 1 required argument.
 
 `Cryptr(secret)`
 
-The `salt` and `iv` are randomly generated and prepended to the result
+The `salt` and `iv` are randomly generated and prepended to the result.
+
+You can also configure the number of pbkdf2 iterations. Reducing from 100000 (default) to 10000 yields a 10x speed improvement.
+
+`Cryptr(secret, 10000)`
 
 **DO NOT USE THIS MODULE FOR ENCRYPTING PASSWORDS!**
 
