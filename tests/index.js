@@ -4,7 +4,7 @@ const Cryptr = require('../');
 const testSecret = 'myTotalySecretKey';
 const testData = 'bacon';
 
-test('works...', t => {
+test('works...', (t) => {
     t.plan(1);
 
     const cryptr = new Cryptr(testSecret);
@@ -14,17 +14,68 @@ test('works...', t => {
     t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
-test('works with custom pbkdf2Iterations', t => {
+test('works with custom pbkdf2Iterations', (t) => {
     t.plan(1);
 
-    const cryptr = new Cryptr(testSecret, 10000);
+    const cryptr = new Cryptr(testSecret, { pbkdf2Iterations: 10000 });
     const encryptedString = cryptr.encrypt(testData);
     const decryptedString = cryptr.decrypt(encryptedString);
 
-    t.equal(decryptedString, testData, 'decrypted aes256 correctly');
+    t.equal(decryptedString, testData, 'decrypted aes256 correctly with custom iterations');
 });
 
-test('works with utf8 specific characters', t => {
+test('custom pbkdf2Iterations affects speed', (t) => {
+    t.plan(1);
+
+    const cryptr = new Cryptr(testSecret, { pbkdf2Iterations: 1000 });
+    const cryptr2 = new Cryptr(testSecret);
+    const customStart = performance.now();
+    for (let index = 0; index < 10; index++) {
+        const encryptedString = cryptr.encrypt(testData + index);
+        cryptr.decrypt(encryptedString);
+    }
+    const customEnd = performance.now();
+
+    const defaultStart = performance.now();
+    for (let index = 0; index < 10; index++) {
+        const encryptedString = cryptr2.encrypt(testData + index);
+        cryptr2.decrypt(encryptedString);
+    }
+    const defaultEnd = performance.now();
+
+    const customTime = customEnd - customStart;
+    const defaultTime = defaultEnd - defaultStart;
+
+    t.ok(customTime < defaultTime, 'custom iterations were faster');
+});
+
+test('works with custom saltLength', (t) => {
+    t.plan(1);
+
+    const cryptr = new Cryptr(testSecret, { saltLength: 10 });
+    const encryptedString = cryptr.encrypt(testData);
+    const decryptedString = cryptr.decrypt(encryptedString);
+
+    t.equal(decryptedString, testData, 'decrypted aes256 correctly with custom salt length');
+});
+
+test('custom saltLength affects output length', (t) => {
+    t.plan(1);
+
+    const customSaltLength = 30;
+    const cryptr = new Cryptr(testSecret, { saltLength: customSaltLength });
+    const cryptr2 = new Cryptr(testSecret);
+    const encryptedString = cryptr.encrypt(testData);
+    const encryptedString2 = cryptr2.encrypt(testData);
+
+    t.equal(
+        encryptedString2.length - encryptedString.length,
+        (64 - customSaltLength) * 2,
+        'output length is affected by salt length',
+    );
+});
+
+test('works with utf8 specific characters', (t) => {
     t.plan(1);
 
     const testString = 'ßáÇÖÑ 🥓';
@@ -35,7 +86,7 @@ test('works with utf8 specific characters', t => {
     t.equal(decryptedString, testString, 'decrypted aes256 correctly with UTF8 chars');
 });
 
-test('goes bang if bad secret', t => {
+test('goes bang if bad secret', (t) => {
     const badSecrets = [null, undefined, 0, 123451345134, '', Buffer.from('buffer'), {}];
 
     t.plan(badSecrets.length);
@@ -49,7 +100,7 @@ test('goes bang if bad secret', t => {
     }
 });
 
-test('encrypt goes bang if value is null or undefined', t => {
+test('encrypt goes bang if value is null or undefined', (t) => {
     const cryptr = new Cryptr(testSecret);
     const badValues = [null, undefined];
 
@@ -64,7 +115,7 @@ test('encrypt goes bang if value is null or undefined', t => {
     }
 });
 
-test('decrypt goes bang if value is null or undefined', t => {
+test('decrypt goes bang if value is null or undefined', (t) => {
     const cryptr = new Cryptr(testSecret);
     const badValues = [null, undefined];
 
@@ -79,7 +130,7 @@ test('decrypt goes bang if value is null or undefined', t => {
     }
 });
 
-test('decrypt goes bang if value has been tampered with', t => {
+test('decrypt goes bang if value has been tampered with', (t) => {
     t.plan(1);
 
     const cryptr = new Cryptr(testSecret);

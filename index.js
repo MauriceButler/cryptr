@@ -2,19 +2,30 @@ const crypto = require('crypto');
 
 const algorithm = 'aes-256-gcm';
 const ivLength = 16;
-const saltLength = 64;
 const tagLength = 16;
-const tagPosition = saltLength + ivLength;
-const encryptedPosition = tagPosition + tagLength;
+const defaultSaltLength = 64;
+const defaultPbkdf2Iterations = 100000;
 
-function Cryptr(secret, pbkdf2Iterations) {
+function Cryptr(secret, options) {
     if (!secret || typeof secret !== 'string') {
         throw new Error('Cryptr: secret must be a non-0-length string');
     }
 
-    if (!pbkdf2Iterations) {
-        pbkdf2Iterations = 100000
+    let saltLength = defaultSaltLength;
+    let pbkdf2Iterations = defaultPbkdf2Iterations;
+
+    if (options) {
+        if (options.pbkdf2Iterations) {
+            pbkdf2Iterations = options.pbkdf2Iterations;
+        }
+
+        if (options.saltLength) {
+            saltLength = options.saltLength;
+        }
     }
+
+    const tagPosition = saltLength + ivLength;
+    const encryptedPosition = tagPosition + tagLength;
 
     function getKey(salt) {
         return crypto.pbkdf2Sync(secret, salt, pbkdf2Iterations, 32, 'sha512');
