@@ -3,6 +3,7 @@
   "version": "6.1.0",
   "description": "a simple encrypt and decrypt module for node.js",
   "main": "index.js",
+  "types": "index.d.ts",
   "directories": {
     "test": "tests"
   },
