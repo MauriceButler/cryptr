@@ -56,10 +56,10 @@ function Cryptr(secret, options) {
 
         const stringValue = Buffer.from(String(value), 'hex');
 
-        const salt = stringValue.slice(0, saltLength);
-        const iv = stringValue.slice(saltLength, tagPosition);
-        const tag = stringValue.slice(tagPosition, encryptedPosition);
-        const encrypted = stringValue.slice(encryptedPosition);
+        const salt = stringValue.subarray(0, saltLength);
+        const iv = stringValue.subarray(saltLength, tagPosition);
+        const tag = stringValue.subarray(tagPosition, encryptedPosition);
+        const encrypted = stringValue.subarray(encryptedPosition);
 
         const key = getKey(salt);
 
