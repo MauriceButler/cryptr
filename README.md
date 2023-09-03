@@ -12,6 +12,7 @@ The Cryptr constructor takes 1 required argument, and an optional options object
 
 -   secret: `<string>`
 -   options: `<Object>`
+    -   encoding: `<string>` Defaults to 'hex' (see [Node.js Buffer documentation] for valid options)
     -   pbkdf2Iterations: `<number>` Defaults to 100000
     -   saltLength: `<number>` Defaults to 64
 
@@ -42,11 +43,13 @@ console.log(decryptedString); // bacon
 
 ```javascript
 const Cryptr = require('cryptr');
-const cryptr = new Cryptr('myTotallySecretKey', { pbkdf2Iterations: 10000, saltLength: 10 });
+const cryptr = new Cryptr('myTotallySecretKey', { encoding: 'base64', pbkdf2Iterations: 10000, saltLength: 10 });
 
 const encryptedString = cryptr.encrypt('bacon');
 const decryptedString = cryptr.decrypt(encryptedString);
 
-console.log(encryptedString); // 33b2c319908e72e899db0cad10dd1e24a999cd4922d64c6fbe261020f97ed4fdfe07124268df34bae00ee09f9d91a7
+console.log(encryptedString); // CPbKO/FFLQ8lVKxV+jYJcLcpTU0ZvW3D+JVfUecmJmLYY10UxYEa/wf8PWDQqhw=
 console.log(decryptedString); // bacon
 ```
+
+[Node.js Buffer documentation]: https://nodejs.org/api/buffer.html#buffers-and-character-encodings
