@@ -3,6 +3,7 @@ const crypto = require('crypto');
 const algorithm = 'aes-256-gcm';
 const ivLength = 16;
 const tagLength = 16;
+const defaultEncoding = 'hex';
 const defaultSaltLength = 64;
 const defaultPbkdf2Iterations = 100000;
 
@@ -11,10 +12,15 @@ function Cryptr(secret, options) {
         throw new Error('Cryptr: secret must be a non-0-length string');
     }
 
+    let encoding = defaultEncoding;
     let saltLength = defaultSaltLength;
     let pbkdf2Iterations = defaultPbkdf2Iterations;
 
     if (options) {
+        if (options.encoding) {
+          encoding = options.encoding;
+        }
+
         if (options.pbkdf2Iterations) {
             pbkdf2Iterations = options.pbkdf2Iterations;
         }
@@ -46,7 +52,7 @@ function Cryptr(secret, options) {
 
         const tag = cipher.getAuthTag();
 
-        return Buffer.concat([salt, iv, tag, encrypted]).toString('hex');
+        return Buffer.concat([salt, iv, tag, encrypted]).toString(encoding);
     };
 
     this.decrypt = function decrypt(value) {
@@ -54,7 +60,7 @@ function Cryptr(secret, options) {
             throw new Error('value must not be null or undefined');
         }
 
-        const stringValue = Buffer.from(String(value), 'hex');
+        const stringValue = Buffer.from(String(value), encoding);
 
         const salt = stringValue.slice(0, saltLength);
         const iv = stringValue.slice(saltLength, tagPosition);
