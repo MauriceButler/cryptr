@@ -18,7 +18,7 @@ function Cryptr(secret, options) {
 
     if (options) {
         if (options.encoding) {
-          encoding = options.encoding;
+            encoding = options.encoding;
         }
 
         if (options.pbkdf2Iterations) {

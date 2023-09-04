@@ -15,24 +15,28 @@ test('works...', (t) => {
 });
 
 test('works with custom encoding', (t) => {
-  t.plan(1);
+    const encodings = ['hex', 'base64', 'latin1'];
 
-  const cryptr = new Cryptr(testSecret, { encoding: 'base64' });
-  const encryptedString = cryptr.encrypt(testData);
-  const decryptedString = cryptr.decrypt(encryptedString);
+    t.plan(encodings.length);
 
-  t.equal(decryptedString, testData, 'decrypted aes256 correctly with custom encoding');
+    encodings.forEach((encoding) => {
+        const cryptr = new Cryptr(testSecret, { encoding });
+        const encryptedString = cryptr.encrypt(testData);
+        const decryptedString = cryptr.decrypt(encryptedString);
+
+        t.equal(decryptedString, testData, `decrypted correctly with ${encoding} encoding`);
+    });
 });
 
 test('custom encoding affects output length', (t) => {
-  t.plan(1);
+    t.plan(1);
 
-  const cryptr = new Cryptr(testSecret, { encoding: 'base64' });
-  const cryptr2 = new Cryptr(testSecret);
-  const encryptedString = cryptr.encrypt(testData);
-  const encryptedString2 = cryptr2.encrypt(testData);
+    const cryptr = new Cryptr(testSecret, { encoding: 'base64' });
+    const cryptr2 = new Cryptr(testSecret);
+    const encryptedString = cryptr.encrypt(testData);
+    const encryptedString2 = cryptr2.encrypt(testData);
 
-  t.ok(encryptedString.length < encryptedString2.length, 'custom encoding was shorter');
+    t.ok(encryptedString.length < encryptedString2.length, 'custom encoding was shorter');
 });
 
 test('works with custom pbkdf2Iterations', (t) => {
