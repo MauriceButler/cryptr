@@ -14,6 +14,27 @@ test('works...', (t) => {
     t.equal(decryptedString, testData, 'decrypted aes256 correctly');
 });
 
+test('works with custom encoding', (t) => {
+  t.plan(1);
+
+  const cryptr = new Cryptr(testSecret, { encoding: 'base64' });
+  const encryptedString = cryptr.encrypt(testData);
+  const decryptedString = cryptr.decrypt(encryptedString);
+
+  t.equal(decryptedString, testData, 'decrypted aes256 correctly with custom encoding');
+});
+
+test('custom encoding affects output length', (t) => {
+  t.plan(1);
+
+  const cryptr = new Cryptr(testSecret, { encoding: 'base64' });
+  const cryptr2 = new Cryptr(testSecret);
+  const encryptedString = cryptr.encrypt(testData);
+  const encryptedString2 = cryptr2.encrypt(testData);
+
+  t.ok(encryptedString.length < encryptedString2.length, 'custom encoding was shorter');
+});
+
 test('works with custom pbkdf2Iterations', (t) => {
     t.plan(1);
 
