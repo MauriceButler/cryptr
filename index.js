@@ -28,6 +28,15 @@ function Cryptr(secret, options) {
         if (options.saltLength) {
             saltLength = options.saltLength;
         }
+
+        if (options.fixedIv) {
+            fixedIv = options.fixedIv;
+        }
+
+        if (options.fixedSalt) {
+            fixedSalt = options.fixedSalt;
+            saltLength = options.fixedSalt.length;
+        }
     }
 
     const tagPosition = saltLength + ivLength;
@@ -42,8 +51,8 @@ function Cryptr(secret, options) {
             throw new Error('value must not be null or undefined');
         }
 
-        const iv = crypto.randomBytes(ivLength);
-        const salt = crypto.randomBytes(saltLength);
+        const iv = fixedIv ? Buffer.from(fixedIv) : crypto.randomBytes(ivLength);
+        const salt = fixedSalt ? Buffer.from(fixedSalt) : crypto.randomBytes(saltLength);
 
         const key = getKey(salt);
 
